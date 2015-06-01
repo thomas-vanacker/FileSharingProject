@@ -30,6 +30,7 @@ public class WebServer extends Thread {
 	private static final String ALL_PATTERN = "*";
 	private static final String MESSAGE_PATTERN = "/message*";
 	private static final String FOLDER_PATTERN = "/dir*";
+	private static final String QUIZ_PATTERN = "/quiz*";
 	
 	private boolean isRunning = false;
 	private Context context = null;
@@ -68,7 +69,9 @@ public class WebServer extends Thread {
         registry.register(ALL_PATTERN, new HomePageHandler(context));
         registry.register(MESSAGE_PATTERN, new MessageCommandHandler(context, notifyManager));
         registry.register(FOLDER_PATTERN, new FolderCommandHandler(context, serverPort));
-        
+		registry.register(QUIZ_PATTERN, new QuizCommandHandler(context, serverPort));
+		registry.register(QUIZ_PATTERN.substring(1), new QuizCommandHandler(context, serverPort));
+
         httpService.setHandlerResolver(registry);
 	}
 	
