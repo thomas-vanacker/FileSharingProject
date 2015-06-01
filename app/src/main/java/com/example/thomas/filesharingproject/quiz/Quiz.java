@@ -6,12 +6,12 @@ import java.util.ArrayList;
  * Created by Thomas on 01/06/2015.
  */
 public class Quiz {
-    public String title;
-    public ArrayList<Question> question_list;
+    private String title;
+    private ArrayList<Question> question_list = new ArrayList<>();
 
     public Quiz(String title, ArrayList<Question> question_list) {
-        this.title = title;
-        this.question_list = question_list;
+        this.setTitle(title);
+        this.setQuestion_list(question_list);
     }
 
     public String getTitle() {
@@ -35,4 +35,5 @@ public class Quiz {
         arrayList.add(question);
         this.setQuestion_list(arrayList);
     }
+
 }

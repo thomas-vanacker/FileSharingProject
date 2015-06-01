@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Question {
     public String intitulate;
-    public ArrayList<Answer> answer_list;
+    public ArrayList<Answer> answer_list = new ArrayList<>();
 
     public Question(ArrayList<Answer> answer_list, String intitulate) {
         this.answer_list = answer_list;
