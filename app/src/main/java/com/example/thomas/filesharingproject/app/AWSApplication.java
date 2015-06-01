@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class AWSApplication extends Application {
@@ -26,19 +25,27 @@ public class AWSApplication extends Application {
 	}
 
 	private void loadQuizes() {
+		Quizes quizes = new Quizes();
 		try {
 			Gson gson = new Gson();
 			InputStream inStream = openFileInput("quizes.json");
-			Quizes quizes = new Quizes();
 			if (inStream != null) {
-				InputStreamReader inputStreamReader = new InputStreamReader(inStream);
-				quizes = gson.fromJson(inputStreamReader, Quizes.class);
+				byte[] b;
+				b = new byte[inStream.available()];
+				inStream.read(b);
+				String json = new String(b);
+				quizes = gson.fromJson(json, Quizes.class);
 			}
-			Quizes.setSingleton(quizes);
-			saveQuizes();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		if (quizes == null) {
+			quizes = new Quizes();
+		}
+		Quizes.setSingleton(quizes);
+		saveQuizes();
 	}
 
 	@Override
@@ -57,7 +64,9 @@ public class AWSApplication extends Application {
 			OutputStreamWriter writer = new OutputStreamWriter(openFileOutput("quizes.json", Context.MODE_PRIVATE));
 			try {
 				Gson gson = new Gson();
-				writer.write(gson.toJson(Quizes.getSingleton()));
+				String json = gson.toJson(Quizes.getSingleton());
+				writer.write(json);
+				writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
